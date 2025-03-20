@@ -7,6 +7,7 @@ use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\LevelController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\SalesController;
+use App\Http\Controllers\WelcomeController;
 
 // JOBSHEET 2
 // Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -39,3 +40,16 @@ Route::get('/user/ubah/{id}', [UserController::class, 'ubah']);
 Route::put('/user/ubah_simpan/{id}', [UserController::class, 'ubah_simpan']);
 
 Route::get('/user/hapus/{id}', [UserController::class, 'hapus']);
+
+// JOBSHEET 5
+Route::get('/', [WelcomeController::class, 'index']);
+Route::group(['prefix' => 'user'], function () {
+    Route::get('/', [UserController::class, 'index']);
+    Route::get('/list', [UserController::class, 'list']);
+    Route::get('/create', [UserController::class, 'create']);
+    Route::post('/', [UserController::class, 'store']);
+    Route::get('/{id}', [UserController::class, 'show']);
+    Route::get('/{id}/edit', [UserController::class, 'edit']);
+    Route::put('/{id}', [UserController::class, 'update']);
+    Route::delete('/{id}', [UserController::class, 'destroy']);
+});
