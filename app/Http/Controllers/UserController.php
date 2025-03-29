@@ -313,7 +313,6 @@ class UserController extends Controller
             ->with('level', $level);
     }
 
-    // Menyimpan perubahan data user
     public function update(Request $request, string $id)
     {
         $request->validate([
