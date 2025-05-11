@@ -59,7 +59,10 @@ Route::middleware(['auth'])->group(function () {
     });
 
 
-    Route::group(['prefix' => 'kategori'], function () {
+    Route::group([
+            'prefix' => 'kategori',
+            'middleware' => ['authorize:ADM,MNG']
+        ], function () {
         Route::get('/', [KategoriController::class, 'index']);
         Route::get('/list', [KategoriController::class, 'list']);
         Route::get('/create', [KategoriController::class, 'create']);
@@ -77,7 +80,10 @@ Route::middleware(['auth'])->group(function () {
         Route::delete('/{id}/delete_ajax', [KategoriController::class, 'delete_ajax']);
     });
 
-    Route::group(['prefix' => 'barang'], function () {
+    Route::group([
+        'prefix' => 'barang',
+        'middleware' => ['authorize:ADM,MNG']
+    ], function () {
         Route::get('/', [BarangController::class, 'index']);
         Route::get('/create', [BarangController::class, 'create']);
         Route::post('/', [BarangController::class, 'store']);
@@ -93,8 +99,10 @@ Route::middleware(['auth'])->group(function () {
         Route::delete('/{id}', [BarangController::class, 'destroy']);
     });
 
-
-    Route::group(['prefix' => 'supplier'], function () {
+    Route::group([
+        'prefix' => 'supplier',
+        'middleware' => ['authorize:ADM,MNG']
+    ], function () {
         Route::get('/', [SupplierController::class, 'index']);
         Route::get('/create', [SupplierController::class, 'create']);
         Route::post('/', [SupplierController::class, 'store']);
@@ -110,7 +118,10 @@ Route::middleware(['auth'])->group(function () {
         Route::delete('/{id}', [SupplierController::class, 'destroy']);
     });
 
-    Route::group(['prefix' => 'user'], function () {
+    Route::group([
+        'prefix' => 'user',
+        'middleware' => ['auth', 'authorize:ADM,MNG']
+    ], function () {
         Route::get('/', [UserController::class, 'index']);
         Route::get('/list', [UserController::class, 'list']);
         Route::get('/create', [UserController::class, 'create']);
