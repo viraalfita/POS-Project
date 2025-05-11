@@ -137,6 +137,14 @@ Route::middleware(['auth'])->group(function () {
         Route::delete('/{id}/delete_ajax', [UserController::class, 'delete_ajax']);
         Route::delete('/{id}', [UserController::class, 'destroy']);
     });
+
+    Route::group([
+        'prefix' => 'penjualan',
+        'middleware' => ['auth', 'authorize:ADM,MNG,STF']
+    ], function () {
+        Route::get('/', [PenjualanController::class, 'index']);
+    });
+
 });
 
 
