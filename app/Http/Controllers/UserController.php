@@ -9,6 +9,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class UserController extends Controller
 {
@@ -142,6 +144,75 @@ class UserController extends Controller
         $level = LevelModel::all();
 
         return view('user.index', ['breadcrumb' => $breadcrumb, 'page' => $page, 'level' => $level, 'activeMenu' => $activeMenu]);
+    }
+
+    public function profile()
+    {
+        $user = Auth::user();
+        
+        $breadcrumb = (object) [
+            'title' => 'Profil Saya',
+            'list' => ['Home', 'Profil']
+        ];
+
+        $page = (object) [
+            'title' => 'Edit Profil'
+        ];
+
+        $activeMenu = 'profile';
+
+        return view('user.profile', [
+            'breadcrumb' => $breadcrumb,
+            'page' => $page,
+            'user' => $user,
+            'activeMenu' => $activeMenu
+        ]);
+    }   
+
+    public function updateProfile(Request $request)
+    {
+        $user = Auth::user();
+        
+        $rules = [
+            'username' => 'required|string|min:3|unique:m_user,username,'.$user->user_id.',user_id',
+            'nama' => 'required|string|max:100',
+            'password' => 'nullable|min:5|confirmed',
+            'profile_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
+        ];
+
+        $validator = Validator::make($request->all(), $rules);
+
+        if ($validator->fails()) {
+            return redirect()->back()
+                ->withErrors($validator)
+                ->withInput();
+        }
+
+        $data = [
+            'username' => $request->username,
+            'nama' => $request->nama,
+        ];
+
+        if ($request->filled('password')) {
+            $data['password'] = bcrypt($request->password);
+        }
+
+        // Menghandle upload gambar
+        if ($request->hasFile('profile_image')) {
+            // Menghapus gambar lama
+            if ($user->profile_image) {
+                Storage::delete('public/profile_images/'.$user->profile_image);
+            }
+            
+            $imageName = time().'.'.$request->profile_image->extension();
+            $request->profile_image->storeAs('public/profile_images', $imageName);
+            $data['profile_image'] = $imageName;
+        }
+
+        $user->update($data);
+
+        return redirect()->route('user.profile')
+            ->with('success', 'Profil berhasil diperbarui');
     }
 
     public function list(Request $request)

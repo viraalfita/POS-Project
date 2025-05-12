@@ -15,6 +15,7 @@
 </head>
 <body class="hold-transition sidebar-mini">
 <div class="wrapper">
+    @include('layouts.header')
     <aside class="main-sidebar sidebar-dark-primary elevation-4" style="position: fixed">
         <a href="{{ url('/') }}" class="brand-link">
             <img src="{{ asset('dist/img/AdminLTELogo.png') }}" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
