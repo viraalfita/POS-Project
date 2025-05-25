@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\RegisterController;
+use App\Http\Controllers\Api\LevelController;
 
 /*
 |--------------------------------------------------------------------------
@@ -34,3 +35,10 @@ Route::group(['middleware' => 'auth:api'], function() {
     });
 });
 Route::post('/logout', [App\Http\Controllers\Api\LogoutController::class, '__invoke'])->name('logout');
+
+// Level
+Route::get('levels', [App\Http\Controllers\Api\LevelController::class, 'index']);
+Route::post('levels', [App\Http\Controllers\Api\LevelController::class, 'store']);
+Route::get('levels/{level}', [App\Http\Controllers\Api\LevelController::class, 'show']);
+Route::put('levels/{level}', [App\Http\Controllers\Api\LevelController::class, 'update']);
+Route::delete('levels/{level}', [App\Http\Controllers\Api\LevelController::class, 'destroy']);
