@@ -20,3 +20,16 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::post('/register', [App\Http\Controllers\Api\RegisterController::class, '__invoke'])->name('register');
+
+Route::post('/login', [App\Http\Controllers\Api\LoginController::class, '__invoke'])->name('login');
+Route::middleware('auth:api')->get('/user', function (Request $request) { 
+    return $request->user(); 
+});
+Route::group(['middleware' => 'auth:api'], function() {
+    Route::get('/user', function(Request $request) {
+        return response()->json([
+            'success' => true,
+            'user' => auth()->guard('api')->user()
+        ]);
+    });
+});
