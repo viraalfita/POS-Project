@@ -32,7 +32,8 @@ class UserModel extends Authenticable implements JWTSubject
         'password',
         'profile_image',
         'created_at',
-        'updated_at'
+        'updated_at',
+        'image'
     ];
 
     protected $hidden = [
@@ -46,6 +47,13 @@ class UserModel extends Authenticable implements JWTSubject
     public function level(): BelongsTo
     {
         return $this->belongsTo(LevelModel::class, 'level_id', 'level_id');
+    }
+
+    protected function image(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($image) => url('/storage/posts/' . $image),
+        );
     }
 
     public function getRoleName(): string
@@ -62,4 +70,7 @@ class UserModel extends Authenticable implements JWTSubject
     {
         return $this->level->level_kode;
     } 
+
+    
+
 }
